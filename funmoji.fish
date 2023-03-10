@@ -61,7 +61,14 @@ function main
     set -l RNG $(shuf -i 1-$LEN -n 1)
     set -l COLOR "\033[$IS_BOLD;$(shuf -i 91-97 -n 1)m"
     set -l END "\033[0m"
-    echo -e "\t\t\t$COLOR$EMOJIS[$RNG]$END"
+    set -l SIZE "$(stty size | cut -f2 -d ' ')"
+    set -l COLS $(math "($SIZE / 2) - 1")
+
+    for i in (seq 1 $COLS)
+        echo -n " "
+    end
+
+    echo -e "$COLOR$EMOJIS[$RNG]$END"
     exit 0
 end
 

@@ -3,7 +3,7 @@
 set -e
 
 function main() {
-    local EMOJIS LEN RNG COLOR END IS_BOLD
+    local EMOJIS LEN RNG COLOR END IS_BOLD STTY COLS
     EMOJIS=(
         # Random emojis
         "(′ꈍヮꈍ‵)" "˃́ᗜ˂̀" "( ^∇^)(•̀ω•́ )" "ヽ(⪰◡⪯)ﾉ" "ヽ（oωo）ﾉ" "◝(^ヮ^)◜" "◝(^௰^)◜" "ヽ(ôᴗôヽ)" "⌒(o＾▽＾o)ノ" "ヽ(๑╹◡╹๑)ﾉ♫"
@@ -65,8 +65,14 @@ function main() {
     RNG=$(shuf -i 0-$LEN -n 1)
     COLOR="\033[$IS_BOLD;$(shuf -i 91-97 -n 1)m"
     END="\033[0m"
+    STTY=$(stty size)
+    COLS=$((${STTY#* } / 2))
 
-    echo -e "\t\t\t${COLOR}${EMOJIS[$RNG]}${END}"
+    for ((i = 0; i < COLS - 1; i++)); do
+        echo -n " "
+    done
+
+    echo -e "${COLOR}${EMOJIS[$RNG]}${END}"
     exit 0
 }
 
